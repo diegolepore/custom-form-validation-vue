@@ -13,7 +13,7 @@
           Login
         </h2>
 
-        <form class="mt-10" novalidate="true">
+        <form @submit.prevent="submitForm" class="mt-10" novalidate="true">
           <!-- Email Input -->
           <label
             for="email"
@@ -22,6 +22,7 @@
           >
           <input
             id="email"
+            v-model="formData.email"
             type="email"
             name="email"
             placeholder="Email address"
@@ -36,6 +37,7 @@
           >
           <input
             id="password"
+            v-model="formData.password"
             type="password"
             name="password"
             placeholder="Password"
@@ -54,20 +56,7 @@
           </div>
         </form>
 
-        <div class="flex justify-start mt-3 ml-4 p-1">
-          <ul>
-            <li class="flex items-center py-1">
-              <span class="font-medium text-sm ml-3 text-red-700">
-                The Email is required
-              </span>
-            </li>
-            <li class="flex items-center py-1">
-              <span class="font-medium text-sm ml-3 text-red-700">
-                The Password is required
-              </span>
-            </li>
-          </ul>
-        </div>
+       <errorsList :errors-list="errorsList" />
 
       </div>
     </div>
@@ -75,9 +64,30 @@
 </template>
 
 <script>
+import validationFormMixin from '../mixins/validationFormMixin'
+import errorsList from '../components/errorsList'
 
 export default {
   name: "Login",
+  mixins: [validationFormMixin],
+  components: {
+    errorsList
+  },
+  data() {
+    return {
+      formData: {
+        email: null,
+        password: null
+      }
+    }
+  },
+  methods: {
+    submitForm() {
+      if(this.validateForm()) {
+        alert('Form submit successful')
+      }
+    }
+  }
 };
 </script>
 

@@ -71,15 +71,7 @@
           </div>
         </form>
 
-        <div class="flex justify-start mt-3 ml-4 p-1">
-          <ul>
-            <li v-for="(error, index) in errorsList" :key="index" class="flex items-center py-1">
-              <span class="font-medium text-sm ml-3 text-red-700">
-                {{ error }}
-              </span>
-            </li>
-          </ul>
-        </div>
+        <errorsList :errors-list="errorsList" />
 
       </div>
     </div>
@@ -87,9 +79,15 @@
 </template>
 
 <script>
+import validationFormMixin from '../mixins/validationFormMixin'
+import errorsList from '../components/errorsList'
 
 export default {
   name: "Signup",
+  mixins: [validationFormMixin],
+  components: {
+    errorsList
+  },
   data() {
     return {
       formData: {
@@ -97,7 +95,6 @@ export default {
         email: null,
         password: null
       },
-      errorsList: []
     }
   },
   methods: {
@@ -105,33 +102,6 @@ export default {
       if(this.validateForm()) {
         alert('Form submit successful')
       }
-    },
-    validateForm() {
-      this.errorsList = []
-
-      if(!this.formData.name) {
-        this.errorsList.push('Name is required')
-      }
-
-      if(!this.formData.email) {
-        this.errorsList.push('Email is required')
-      } else if(!this.validateEmail(this.formData.email)) {
-        this.errorsList.push('Please add a valid email')
-      }
-
-      if(!this.formData.password) {
-        this.errorsList.push('Password is required')
-      } else if(this.formData.password.length < 6) {
-        this.errorsList.push('Password must have at least 6 characters')
-      }
-
-      if (this.errorsList.length === 0) {
-        return true
-      }
-    },
-    validateEmail(email) {
-      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      return re.test(email);
     }
   }
 };
