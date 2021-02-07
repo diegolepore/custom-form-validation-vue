@@ -13,7 +13,7 @@
           Signup
         </h2>
 
-        <form class="mt-10" novalidate="true">
+        <form @submit.prevent="submitForm" class="mt-10" novalidate="true">
           <!-- Name Input -->
           <label
             for="name"
@@ -22,6 +22,7 @@
           >
           <input
             id="name"
+            v-model="formData.name"
             type="text"
             name="name"
             placeholder="Your name"
@@ -36,6 +37,7 @@
           >
           <input
             id="email"
+            v-model="formData.email"
             type="email"
             name="email"
             placeholder="Email address"
@@ -50,6 +52,7 @@
           >
           <input
             id="password"
+            v-model="formData.password"
             type="password"
             name="password"
             placeholder="Password"
@@ -70,19 +73,9 @@
 
         <div class="flex justify-start mt-3 ml-4 p-1">
           <ul>
-            <li class="flex items-center py-1">
+            <li v-for="(error, index) in errorsList" :key="index" class="flex items-center py-1">
               <span class="font-medium text-sm ml-3 text-red-700">
-                The Name is required
-              </span>
-            </li>
-            <li class="flex items-center py-1">
-              <span class="font-medium text-sm ml-3 text-red-700">
-                The Email is required
-              </span>
-            </li>
-            <li class="flex items-center py-1">
-              <span class="font-medium text-sm ml-3 text-red-700">
-                The Password is required
+                {{ error }}
               </span>
             </li>
           </ul>
@@ -97,6 +90,44 @@
 
 export default {
   name: "Signup",
+  data() {
+    return {
+      formData: {
+        name: null,
+        email: null,
+        password: null
+      },
+      errorsList: []
+    }
+  },
+  methods: {
+    submitForm() {
+      if(this.validateForm()) {
+        alert('Form submit successful')
+      }
+    },
+    validateForm() {
+
+      this.errorsList = []
+
+      if(!this.formData.name) {
+        this.errorsList.push('Name is required')
+      }
+
+      if(!this.formData.email) {
+        this.errorsList.push('Email is required')
+      }
+
+      if(!this.formData.password) {
+        this.errorsList.push('Password is required')
+      }
+
+      if (this.errorsList.length === 0) {
+        return true
+      }
+
+    }
+  }
 };
 </script>
 
